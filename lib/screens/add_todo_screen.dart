@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class AddTodoScreen extends StatefulWidget {
   const AddTodoScreen({super.key});
@@ -17,6 +18,20 @@ class AddTodoScreenState extends State<AddTodoScreen> {
     titleController.dispose();
     descriptionController.dispose();
     super.dispose();
+  }
+
+  Future<void> _addTodo() async {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      await FirebaseFirestore.instance.collection('todos').add({
+        'title': titleController.text,
+        'description': descriptionController.text,
+        'userId': user.uid,
+      });
+
+      if (!mounted) return;
+      Navigator.pop(context);
+    }
   }
 
   @override
@@ -39,30 +54,7 @@ class AddTodoScreenState extends State<AddTodoScreen> {
             ),
             const SizedBox(height: 20),
             ElevatedButton(
-              onPressed: () async {
-                final title = titleController.text;
-                final description = descriptionController.text;
-
-                // Ensure this context is used in a synchronous part before async call
-                if (title.isNotEmpty && description.isNotEmpty) {
-                  final navigator = Navigator.of(context);
-
-                  await FirebaseFirestore.instance.collection('todos').add({
-                    'title': title,
-                    'description': description,
-                  });
-
-                  if (mounted) {
-                    navigator.pop();
-                  }
-                } else {
-                  if (mounted) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('Please enter a title and description.')),
-                    );
-                  }
-                }
-              },
+              onPressed: _addTodo,
               child: const Text('Add Todo'),
             ),
           ],
