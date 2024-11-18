@@ -5,7 +5,9 @@ import 'package:intl/intl.dart'; // Import intl package
 import '../screens/edit_todo_screen.dart';
 
 class TodoList extends StatelessWidget {
-  const TodoList({super.key});
+  final String searchQuery;
+
+  const TodoList({super.key, required this.searchQuery});
 
   final Map<String, int> priorityMap = const {
     'High': 1,
@@ -37,8 +39,15 @@ class TodoList extends StatelessWidget {
           return const CircularProgressIndicator();
         }
 
+        final todos = snapshot.data!.docs.where((doc) {
+          final data = doc.data()! as Map<String, dynamic>;
+          final title = data['title']?.toString().toLowerCase() ?? '';
+          final description = data['description']?.toString().toLowerCase() ?? '';
+          return title.contains(searchQuery) || description.contains(searchQuery);
+        }).toList();
+
         return ListView(
-          children: snapshot.data!.docs.map((DocumentSnapshot document) {
+          children: todos.map((DocumentSnapshot document) {
             Map<String, dynamic> data = document.data()! as Map<String, dynamic>;
             String priorityLabel = priorityMap.entries
                 .firstWhere((entry) => entry.value == data['priority'])

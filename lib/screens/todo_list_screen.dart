@@ -1,17 +1,38 @@
 import 'package:flutter/material.dart';
-import '../widgets/todo_list.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'add_todo_screen.dart';
 import 'auth_screen.dart';
+import '../widgets/todo_list.dart';
 
-class TodoListScreen extends StatelessWidget {
+class TodoListScreen extends StatefulWidget {
   const TodoListScreen({super.key});
+
+  @override
+  TodoListScreenState createState() => TodoListScreenState();
+}
+
+class TodoListScreenState extends State<TodoListScreen> {
+  String searchQuery = '';
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  User? get currentUser => _auth.currentUser;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Todo List'),
+        title: TextField(
+          decoration: const InputDecoration(
+            hintText: 'Search Todos...',
+            border: InputBorder.none,
+            hintStyle: TextStyle(color: Colors.greenAccent),
+          ),
+          style: const TextStyle(color: Colors.greenAccent),
+          onChanged: (value) {
+            setState(() {
+              searchQuery = value.toLowerCase();
+            });
+          },
+        ),
         actions: [
           IconButton(
             icon: const Icon(Icons.logout),
@@ -25,9 +46,7 @@ class TodoListScreen extends StatelessWidget {
           ),
         ],
       ),
-      body: const Center(
-        child: TodoList(),
-      ),
+      body: TodoList(searchQuery: searchQuery),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           Navigator.push(
