@@ -1,7 +1,7 @@
+import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/material.dart';
-import 'package:intl/intl.dart'; // Import intl package
+import 'package:intl/intl.dart';
 import '../screens/edit_todo_screen.dart';
 
 class TodoList extends StatelessWidget {
@@ -25,7 +25,7 @@ class TodoList extends StatelessWidget {
     final Stream<QuerySnapshot> todoStream = FirebaseFirestore.instance
         .collection('todos')
         .where('userId', isEqualTo: user.uid)
-        .orderBy('priority') // Sort by numerical priority
+        .orderBy('priority')
         .snapshots();
 
     return StreamBuilder<QuerySnapshot>(
@@ -54,30 +54,68 @@ class TodoList extends StatelessWidget {
                 .key;
             DateTime dueDate = (data['dueDate'] as Timestamp).toDate();
             String formattedDate = DateFormat('HH:mm dd/MM/yyyy').format(dueDate);
-            return ListTile(
-              title: Text(data['title']),
-              subtitle: Text('Priority: $priorityLabel\nDue Date: $formattedDate\n${data['description']}'),
-              trailing: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  IconButton(
-                    icon: const Icon(Icons.edit),
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => EditTodoScreen(document.id, data['title'], data['description']),
-                        ),
-                      );
-                    },
+
+            return Card(
+              margin: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+              child: ListTile(
+                title: Text(
+                  data['title'],
+                  style: Theme.of(context).textTheme.titleLarge!.copyWith(  // Adjusted to make title more prominent
+                    decoration: (data['completed'] ?? false) ? TextDecoration.lineThrough : TextDecoration.none,
                   ),
-                  IconButton(
-                    icon: const Icon(Icons.delete),
-                    onPressed: () {
-                      FirebaseFirestore.instance.collection('todos').doc(document.id).delete();
-                    },
-                  ),
-                ],
+                ),
+                subtitle: Text('Priority: $priorityLabel\nDue Date: $formattedDate\n${data['description']}'),
+                trailing: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Checkbox(
+                      value: data['completed'] ?? false,
+                      onChanged: (bool? value) {
+                        FirebaseFirestore.instance.collection('todos').doc(document.id).update({'completed': value});
+                      },
+                    ),
+                    IconButton(
+                      icon: const Icon(Icons.edit),
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => EditTodoScreen(document.id, data['title'], data['description']),
+                          ),
+                        );
+                      },
+                    ),
+                    IconButton(
+                      icon: const Icon(Icons.delete),
+                      onPressed: () {
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return AlertDialog(
+                              title: const Text('Confirm Deletion'),
+                              content: const Text('Are you sure you want to delete this todo?'),
+                              actions: [
+                                TextButton(
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                  },
+                                  child: const Text('Cancel'),
+                                ),
+                                TextButton(
+                                  onPressed: () {
+                                    FirebaseFirestore.instance.collection('todos').doc(document.id).delete();
+                                    Navigator.of(context).pop();
+                                  },
+                                  child: const Text('Delete'),
+                                ),
+                              ],
+                            );
+                          },
+                        );
+                      },
+                    ),
+                  ],
+                ),
               ),
             );
           }).toList(),

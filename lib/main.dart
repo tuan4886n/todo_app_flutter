@@ -5,8 +5,7 @@ import 'screens/auth_screen.dart';
 import 'screens/todo_list_screen.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
-final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-FlutterLocalNotificationsPlugin();
+final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -35,6 +34,16 @@ class MyApp extends StatelessWidget {
       title: 'Todo App',
       theme: ThemeData(
         primarySwatch: Colors.blue,
+        hintColor: Colors.orange,
+        buttonTheme: const ButtonThemeData(
+          buttonColor: Colors.orange,
+          textTheme: ButtonTextTheme.primary,
+        ),
+        textTheme: const TextTheme(
+          headlineLarge: TextStyle(fontSize: 32.0, fontWeight: FontWeight.bold, color: Colors.blue),
+          bodyLarge: TextStyle(fontSize: 16.0, color: Colors.black),
+          bodyMedium: TextStyle(fontSize: 14.0, color: Colors.grey),
+        ),
       ),
       home: const AuthScreen(),
       routes: {
