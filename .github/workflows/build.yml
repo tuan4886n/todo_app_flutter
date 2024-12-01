@@ -29,7 +29,7 @@ jobs:
         run: docker cp my_flutter_app_container:/app/build/app/outputs/apk/release/app-release.apk .
 
       - name: Upload APK
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: app-release
           path: app-release.apk
