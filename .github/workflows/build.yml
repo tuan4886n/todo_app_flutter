@@ -1,0 +1,38 @@
+name: Build Flutter APK with Docker
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+
+      - name: Build Docker image
+        run: docker build -t my_flutter_app .
+
+      - name: Run Docker container
+        run: docker run --name my_flutter_app_container my_flutter_app
+
+      - name: Copy APK from Docker container
+        run: docker cp my_flutter_app_container:/app/build/app/outputs/apk/release/app-release.apk .
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v2
+        with:
+          name: app-release
+          path: app-release.apk
+
+      - name: Clean up
+        run: docker rm my_flutter_app_container
