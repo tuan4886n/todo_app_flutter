@@ -3,24 +3,12 @@ import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 import 'screens/auth_screen.dart';
 import 'screens/todo_list_screen.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-
-final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-
-  const AndroidInitializationSettings initializationSettingsAndroid =
-  AndroidInitializationSettings('@mipmap/ic_launcher');
-
-  const InitializationSettings initializationSettings = InitializationSettings(
-    android: initializationSettingsAndroid,
-  );
-
-  await flutterLocalNotificationsPlugin.initialize(initializationSettings);
 
   runApp(const MyApp());
 }
@@ -40,7 +28,8 @@ class MyApp extends StatelessWidget {
           textTheme: ButtonTextTheme.primary,
         ),
         textTheme: const TextTheme(
-          headlineLarge: TextStyle(fontSize: 32.0, fontWeight: FontWeight.bold, color: Colors.blue),
+          headlineLarge: TextStyle(
+              fontSize: 32.0, fontWeight: FontWeight.bold, color: Colors.blue),
           bodyLarge: TextStyle(fontSize: 16.0, color: Colors.black),
           bodyMedium: TextStyle(fontSize: 14.0, color: Colors.grey),
         ),
