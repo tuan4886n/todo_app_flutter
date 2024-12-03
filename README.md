@@ -3,8 +3,8 @@
 A simple todo app built with Flutter. It is a small DIY project to learn and fun to record todos.
 
 <p align="center"> 
-    <img src="https://github.com/user-attachments/assets/33c8279b-9aca-4608-9eee-fb2b3f54cecb" alt="Image 1" width="200"/> 
-    <img src="https://github.com/user-attachments/assets/1e6bde8f-0d6b-40ed-ba17-824e3cd4ae63" alt="Image 2" width="200"/> 
+    <img src="https://github.com/user-attachments/assets/33c8279b-9aca-4608-9eee-fb2b3f54cecb" alt="Image 1" width="200" style="margin-right: 20px;"/> 
+    <img src="https://github.com/user-attachments/assets/1e6bde8f-0d6b-40ed-ba17-824e3cd4ae63" alt="Image 2" width="200" style="margin-right: 20px;"/> 
     <img src="https://github.com/user-attachments/assets/5dd5d2f0-2716-412b-b67a-0528178cabe2" alt="Image 3" width="200"/> 
 </p>
 
@@ -14,6 +14,7 @@ A simple todo app built with Flutter. It is a small DIY project to learn and fun
 - Store data in Firebase
 - Add, edit, and delete tasks
 - Mark tasks as completed
+- Add a due date
 - Prioritize
 
 ## Local Setup
