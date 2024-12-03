@@ -102,4 +102,4 @@ This project uses GitHub Actions for continuous integration and deployment. The 
 
 This README.md includes essential sections like features, local setup, Firebase configuration, using Docker, and CI/CD with GitHub Actions. This will help users easily set up and use your application.
 
-This is just a small personal project for learning and fun purposes! 😊🚀
+This is just a small personal project for learning and fun purposes!, this is my [apk file](https://drive.google.com/file/d/1ZtEghMNOxj_dX3LLvz5mTwG1X6cPh0pp/view?usp=drive_link) 😊🚀
